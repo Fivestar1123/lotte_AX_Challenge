@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  시나리오 A: DefaultServlet의 readonly를 명시적으로 false로 열어둔 설정.
+  CVE-2025-24813 (Apache Tomcat Path Equivalence, CISA KEV 등재)의 1차 전제조건이
+  성립한다 — "Default Servlet에 쓰기 권한이 활성화되어 있는가".
+  Tomcat 9.0.30에는 벤더 패치(9.0.99+)에서 추가된 allowPartialPut 토글이 없어
+  partial PUT 지원이 항상 켜져 있으므로, 9.0.30 기준으로는 readonly 값 하나가
+  사실상 유일한 on/off 스위치다.
+  (주의: 이 web.xml은 실제 Tomcat 기본 conf/web.xml 전체가 아니라, 판정에 필요한
+  DefaultServlet 정의만 남긴 축약본이다 — 실제 운영 web.xml에는 JSP 서블릿,
+  mime-mapping 등 수백 줄이 더 있다.)
+-->
+<web-app>
+  <servlet>
+    <servlet-name>default</servlet-name>
+    <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+    <init-param>
+      <param-name>debug</param-name>
+      <param-value>0</param-value>
+    </init-param>
+    <init-param>
+      <param-name>listings</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <init-param>
+      <param-name>readonly</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>

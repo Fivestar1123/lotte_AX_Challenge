@@ -1,0 +1,116 @@
+[
+  {
+    "cve_id": "CVE-2025-24813",
+    "scenario": "ajp-vulnerable",
+    "mode": "llm",
+    "evidence": {
+      "cvss": 10,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "epss": 0.99942,
+      "kev": true,
+      "kev_due_date": "2025-04-22",
+      "reachable": true,
+      "reachability_reason": "DefaultServlet readonly=false → partial PUT으로 보안 민감 파일 열람/콘텐츠 주입 가능 (세션 FileStore까지 겹치면 RCE로 확대 가능, CVE-2020-9484 판정 참고)",
+      "tier": "Critical",
+      "score": 99.98,
+      "nvd_fix_version": {
+        "fix_version": "9.0.99",
+        "range": ">= 0, < 9.0.99",
+        "source": "NVD cpeMatch"
+      }
+    },
+    "recommendation": "1. 조치 우선순위 한 줄 요약  \n이 취약점은 CVSS 10으로 매우 심각하며, EPSS 확률이 0.99942로 높은 악용 가능성을 보입니다. CISA KEV에 등재되어 있어 조치 기한이 정해져 있으며, 설정 기반 도달성 판정이 'reachable=True'로 확인되어 즉각적인 조치가 필요합니다.\n\n2. 조치안  \n패치 버전 업그레이드는 9.0.30에서 9.0.99로 진행해야 합니다. 추가적으로, DefaultServlet의 readonly 속성을 true로 설정하여 보안 민감 파일의 열람 및 콘텐츠 주입을 방지하는 대체 통제를 적용할 수 있습니다.\n\n3. 검증 절차  \n조치 적용 전 샌드박스 또는 스테이징 환경에서 패치 적용 후 DefaultServlet의 설정이 정상적으로 변경되었는지 확인하고, 보안 민감 파일에 대한 접근이 차단되었는지 검증해야 합니다.\n\n4. 주의사항/한계  \n이 조치안은 제안 사항이며, 실제 운영에 반영하기 위해서는 반드시 관련자의 승인이 필요합니다.",
+    "model": "gpt-4o-mini-2024-07-18",
+    "usage": {
+      "prompt_tokens": 732,
+      "completion_tokens": 257,
+      "total_tokens": 989,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    }
+  },
+  {
+    "cve_id": "CVE-2020-1938",
+    "scenario": "ajp-vulnerable",
+    "mode": "llm",
+    "evidence": {
+      "cvss": 9.8,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "epss": 0.9927,
+      "kev": true,
+      "kev_due_date": "2022-03-17",
+      "reachable": true,
+      "reachability_reason": "AJP 커넥터 활성 + secretRequired/secret 보호 없음 + 외부 바인딩 → 인증 없이 공격 가능",
+      "tier": "Critical",
+      "score": 98.78,
+      "nvd_fix_version": {
+        "fix_version": "9.0.31",
+        "range": ">= 9.0.0, < 9.0.31",
+        "source": "NVD cpeMatch"
+      }
+    },
+    "recommendation": "1. 조치 우선순위 한 줄 요약  \nCVE-2020-1938은 CVSS 9.8로 매우 심각한 취약점이며, EPSS 0.9927로 30일 내 악용 확률이 높고, CISA KEV에 등재되어 있어 즉각적인 조치가 필요합니다.\n\n2. 조치안  \n패치 버전 업그레이드 경로: Tomcat을 9.0.31로 업그레이드합니다.  \n설정 우회/대체 통제: AJP 커넥터를 비활성화하거나, secretRequired 설정을 추가하여 외부 접근을 제한합니다.\n\n3. 검증 절차  \n조치 적용 전 샌드박스/스테이징 환경에서 Tomcat 버전이 9.0.31로 업데이트되었는지 확인하고, AJP 커넥터의 접근 가능성을 점검합니다.\n\n4. 주의사항/한계  \n이 조치안은 제안이며, 운영 환경에 반영하기 위해서는 반드시 관련자의 승인이 필요합니다.",
+    "model": "gpt-4o-mini-2024-07-18",
+    "usage": {
+      "prompt_tokens": 723,
+      "completion_tokens": 237,
+      "total_tokens": 960,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    }
+  },
+  {
+    "cve_id": "CVE-2023-44487",
+    "scenario": "ajp-vulnerable",
+    "mode": "llm",
+    "evidence": {
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "epss": 0.99999,
+      "kev": true,
+      "kev_due_date": "2023-10-31",
+      "reachable": null,
+      "reachability_reason": null,
+      "tier": "Critical",
+      "score": 87.5,
+      "nvd_fix_version": {
+        "fix_version": "9.0.80",
+        "range": ">= 9.0.0, <= 9.0.80",
+        "source": "NVD cpeMatch"
+      }
+    },
+    "recommendation": "1. 조치 우선순위 한 줄 요약  \nCVE-2023-44487은 CVSS 7.5와 EPSS 0.99999로 높은 위험도를 가지며, CISA KEV에 등재되어 있어 긴급히 조치해야 합니다.\n\n2. 조치안  \n영향받는 버전인 9.0.30에서 공식 수정 버전인 9.0.80으로 패치하여 업그레이드합니다. 또한, 해당 기능이나 포트를 비활성화하여 추가적인 보안을 강화할 수 있습니다.\n\n3. 검증 절차  \n조치 적용 전 샌드박스 또는 스테이징 환경에서 패치 적용 후 시스템의 정상 작동 여부 및 보안 취약점 스캔을 통해 취약점이 해결되었는지 확인합니다.\n\n4. 주의사항/한계  \n이 조치안은 제안 사항이며, 운영 환경에 반영하기 위해서는 반드시 관련자의 승인이 필요합니다.",
+    "model": "gpt-4o-mini-2024-07-18",
+    "usage": {
+      "prompt_tokens": 749,
+      "completion_tokens": 213,
+      "total_tokens": 962,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    }
+  }
+]

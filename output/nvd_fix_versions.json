@@ -1,0 +1,19 @@
+{
+  "CVE-2020-15999": null,
+  "CVE-2020-1938": {
+    "fix_version": "9.0.31",
+    "range": ">= 9.0.0, < 9.0.31",
+    "source": "NVD cpeMatch"
+  },
+  "CVE-2022-2068": null,
+  "CVE-2023-44487": {
+    "fix_version": "9.0.80",
+    "range": ">= 9.0.0, <= 9.0.80",
+    "source": "NVD cpeMatch"
+  },
+  "CVE-2025-24813": {
+    "fix_version": "9.0.99",
+    "range": ">= 0, < 9.0.99",
+    "source": "NVD cpeMatch"
+  }
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  시나리오 B: DefaultServlet readonly를 명시적으로 true로 고정한 설정
+  (Tomcat 기본값과 동일하지만, 운영 실수로 바뀌지 않도록 명시).
+  CVE-2025-24813의 전제조건("쓰기 가능한 Default Servlet")이 성립하지 않는다.
+-->
+<web-app>
+  <servlet>
+    <servlet-name>default</servlet-name>
+    <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+    <init-param>
+      <param-name>debug</param-name>
+      <param-value>0</param-value>
+    </init-param>
+    <init-param>
+      <param-name>listings</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <init-param>
+      <param-name>readonly</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>

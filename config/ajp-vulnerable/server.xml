@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  시나리오 A: AJP 커넥터 활성, secretRequired 미설정 (Tomcat 9.0.30 기본값과 동일)
+  CVE-2020-1938 (Ghostcat) 공격 경로가 그대로 열려 있는 설정.
+-->
+<Server port="8005" shutdown="SHUTDOWN">
+  <Service name="Catalina">
+    <Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+
+    <!-- AJP Connector: 활성 상태, secretRequired 속성이 없으면 Tomcat 9.0.30 기준
+         secretRequired 기본값은 true 이지만 secret 미설정 시에도 기동되며,
+         실제 운영 현장에서는 레거시 호환을 위해 secretRequired="false" 로
+         명시적으로 낮춰둔 사례가 많음 (본 PoC 시나리오 A) -->
+    <Connector protocol="AJP/1.3"
+               address="0.0.0.0"
+               port="8009"
+               secretRequired="false"
+               redirectPort="8443" />
+
+    <Engine name="Catalina" defaultHost="localhost">
+      <Host name="localhost" appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+      </Host>
+    </Engine>
+  </Service>
+</Server>

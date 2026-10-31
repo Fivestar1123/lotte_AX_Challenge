@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  시나리오 A: 세션을 디스크에 영속화하기 위해 PersistentManager+FileStore를 켜고,
+  sessionAttributeValueClassNameFilter를 명시하지 않은(=null, 기본값) 설정.
+  CVE-2020-9484 (세션 파일 역직렬화 RCE)의 전제조건 b)+c)가 성립한다.
+  (단, 실제 공격 성립에는 공격자가 서버 파일시스템에 이름/내용을 제어하는 파일을
+  올릴 수 있어야 하는 등 추가 조건이 더 있다 — NVD 설명 참고. 이 PoC는 "서버
+  설정이 공격을 가능하게 두고 있는가"만 판정한다.)
+-->
+<Context>
+  <WatchedResource>WEB-INF/web.xml</WatchedResource>
+  <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>
+  <WatchedResource>${catalina.base}/conf/context.xml</WatchedResource>
+
+  <Manager className="org.apache.catalina.session.PersistentManager"
+           sessionAttributeValueClassNameFilter="null">
+    <Store className="org.apache.catalina.session.FileStore"
+           directory="session-store" />
+  </Manager>
+</Context>

@@ -1,0 +1,101 @@
+[
+  {
+    "cve_id": "CVE-2023-44487",
+    "scenario": "ajp-mitigated",
+    "mode": "llm",
+    "evidence": {
+      "cvss": 7.5,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "epss": 0.99999,
+      "kev": true,
+      "kev_due_date": "2023-10-31",
+      "reachable": null,
+      "reachability_reason": null,
+      "tier": "Critical",
+      "score": 87.5
+    },
+    "recommendation": "1. 조치 우선순위: 매우 높음 (CVSS 7.5, EPSS 0.99999, CISA KEV 등재로 인해 긴급 조치 필요)\n\n2. 조치안: 영향을 받는 컴포넌트의 패치를 적용하여 libnghttp2-14을 1.36.0-3 이상으로, tomcat-api, tomcat-coyote, tomcat-dbcp, tomcat-i18n 관련 모듈을 9.0.31 이상으로 업그레이드합니다. 또한, AJP 프로토콜을 비활성화하거나 방화벽을 통해 접근을 제한하는 대체 통제를 고려합니다.\n\n3. 검증 절차: 조치 적용 전 샌드박스 또는 스테이징 환경에서 패치 적용 후 시스템의 정상 작동 여부, AJP 프로토콜 비활성화 상태, 그리고 관련 로그를 확인하여 취약점이 해결되었는지 검증합니다.\n\n4. 주의사항/한계: 이 조치안은 제안 사항이며, 실제 운영 환경에 반영하기 위해서는 반드시 관련 부서의 승인이 필요합니다.",
+    "model": "gpt-4o-mini-2024-07-18",
+    "usage": {
+      "prompt_tokens": 482,
+      "completion_tokens": 248,
+      "total_tokens": 730,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    }
+  },
+  {
+    "cve_id": "CVE-2020-15999",
+    "scenario": "ajp-mitigated",
+    "mode": "llm",
+    "evidence": {
+      "cvss": 9.6,
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
+      "epss": 0.63894,
+      "kev": true,
+      "kev_due_date": "2021-11-17",
+      "reachable": null,
+      "reachability_reason": null,
+      "tier": "Critical",
+      "score": 87.17
+    },
+    "recommendation": "1. 조치 우선순위 한 줄 요약  \nCVE-2020-15999는 CVSS 9.6으로 심각도가 매우 높고, EPSS 0.63894로 30일 내 악용 확률이 높아 긴급히 조치해야 하며, CISA KEV에 등재되어 있어 조치 기한이 정해져 있습니다.\n\n2. 조치안  \nlibfreetype6의 패치 버전인 2.9.1-3+deb10u2로 업그레이드합니다. 설정 우회 방법으로는 AJP 프로토콜을 비활성화하거나, 대체 통제로는 방화벽 규칙을 강화하여 외부 접근을 차단하는 것을 권장합니다.\n\n3. 검증 절차  \n조치 적용 전 샌드박스 또는 스테이징 환경에서 libfreetype6의 버전 확인, AJP 프로토콜의 비활성화 상태, 방화벽 규칙의 적용 여부를 점검합니다.\n\n4. 주의사항/한계  \n이 조치안은 제안 사항이며, 운영 환경에 반영하기 위해서는 반드시 관련자의 승인이 필요합니다.",
+    "model": "gpt-4o-mini-2024-07-18",
+    "usage": {
+      "prompt_tokens": 369,
+      "completion_tokens": 256,
+      "total_tokens": 625,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    }
+  },
+  {
+    "cve_id": "CVE-2022-2068",
+    "scenario": "ajp-mitigated",
+    "mode": "llm",
+    "evidence": {
+      "cvss": 10,
+      "cvss_vector": "AV:N/AC:L/Au:N/C:C/I:C/A:C",
+      "epss": 0.96391,
+      "kev": false,
+      "kev_due_date": null,
+      "reachable": null,
+      "reachability_reason": null,
+      "tier": "Critical",
+      "score": 78.92
+    },
+    "recommendation": "1. 조치 우선순위: 매우 높음 - CVSS 점수 10과 EPSS 0.96391로 인해 이 취약점은 심각한 위험을 초래할 수 있으며, CISA KEV에 등재되지 않았지만 즉각적인 조치가 필요합니다.\n\n2. 조치안: libssl 및 openssl의 최신 패치 버전으로 업그레이드(예: libssl1.1@1.1.1k, openssl@1.1.1k)하거나, AJP 프로토콜을 사용하지 않도록 설정을 변경하여 대체 통제를 적용합니다.\n\n3. 검증 절차: 조치 적용 전 샌드박스 또는 스테이징 환경에서 패치 적용 후 시스템의 SSL/TLS 연결 및 AJP 프로토콜 동작을 확인하고, 취약점 스캐너를 통해 취약점이 해결되었는지 점검합니다.\n\n4. 주의사항/한계: 이 조치안은 제안 사항이며, 실제 운영 환경에 반영하기 위해서는 반드시 관련자의 승인이 필요합니다.",
+    "model": "gpt-4o-mini-2024-07-18",
+    "usage": {
+      "prompt_tokens": 378,
+      "completion_tokens": 237,
+      "total_tokens": 615,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    }
+  }
+]

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  시나리오 B: AJP 커넥터에 secretRequired="true" + secret 값을 명시적으로 설정.
+  (대안으로 커넥터 블록 자체를 주석 처리/삭제해 완전 비활성화하는 것도 동일 효과)
+  CVE-2020-1938 공격 경로가 인증 토큰 없이는 통하지 않도록 차단된 설정.
+-->
+<Server port="8005" shutdown="SHUTDOWN">
+  <Service name="Catalina">
+    <Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+
+    <!-- AJP Connector: secretRequired=true + secret 설정으로 인증되지 않은
+         AJP 요청을 거부. 외부 노출이 전혀 필요 없다면 이 커넥터 블록 자체를
+         제거하는 것이 더 강한 조치안(대체 통제)이며, 리포트의 조치안에서는
+         두 옵션을 모두 제시한다. -->
+    <Connector protocol="AJP/1.3"
+               address="127.0.0.1"
+               port="8009"
+               secretRequired="true"
+               secret="${env.AJP_SECRET}"
+               redirectPort="8443" />
+
+    <Engine name="Catalina" defaultHost="localhost">
+      <Host name="localhost" appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+      </Host>
+    </Engine>
+  </Service>
+</Server>
