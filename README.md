@@ -168,6 +168,5 @@ python src/report.py         # 리포트만 재렌더링
 
 ## 7. 저장소 상태
 
-로컬 git 저장소로 초기화·초기 커밋 완료(`poc/`가 저장소 루트). GitHub 원격 push는 아직
-진행하지 않았다 — 이 디렉토리를 그대로 GitHub에 올리려면 원격 저장소를 만들고
-`git remote add origin <URL>` 후 `git push -u origin master`를 실행하면 된다.
+`poc/`가 저장소 루트이며 GitHub에 push 완료:
+https://github.com/Fivestar1123/lotte_AX_Challenge
