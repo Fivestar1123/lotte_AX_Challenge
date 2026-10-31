@@ -5,6 +5,7 @@ LLM이 조치안을 생성할 때 수정 버전을 추측하게 두면 다른 CV
 제시한 사례를 PoC 리뷰 중 발견했다). 이 모듈은 NVD의 cpeMatch 버전 범위에서
 설치된 버전(기본 9.0.30)이 속한 구간의 versionEndExcluding/Including을
 "수정 버전"으로 추출해 프롬프트 근거에 미리 박아 넣는다.
+단, versionEndIncluding(X 이하 취약)은 X 자체가 취약 버전이므로 수정 버전으로 쓰지 않는다.
 """
 from __future__ import annotations
 
@@ -71,11 +72,20 @@ def fetch_fix_version(cve_id: str, installed_version: str = INSTALLED_VERSION) -
                 end_incl = match.get("versionEndIncluding")
                 if not _in_range(installed_version, start_incl, end_excl, end_incl):
                     continue
-                fix_version = end_excl or end_incl
-                if fix_version:
+                if end_excl:
+                    # versionEndExcluding=X → "X 미만이 취약"이므로 X가 곧 수정 버전.
                     return {
-                        "fix_version": fix_version,
-                        "range": f">= {start_incl or '0'}, {'<' if end_excl else '<='} {fix_version}",
+                        "fix_version": end_excl,
+                        "range": f">= {start_incl or '0'}, < {end_excl}",
+                        "source": "NVD cpeMatch",
+                    }
+                if end_incl:
+                    # versionEndIncluding=X → "X 이하가 취약". X 자체가 취약 버전이므로
+                    # 수정 버전으로 쓰면 안 된다. 수정 버전은 비우고 벤더 공지 확인으로 넘긴다.
+                    return {
+                        "fix_version": None,
+                        "vulnerable_through": end_incl,
+                        "range": f">= {start_incl or '0'}, <= {end_incl}",
                         "source": "NVD cpeMatch",
                     }
     return None

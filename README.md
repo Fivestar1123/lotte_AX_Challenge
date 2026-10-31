@@ -115,21 +115,24 @@ python src/report.py         # 리포트만 재렌더링
 - CVE-2020-9484만 KEV 미등재인데도(CISA SSVC `exploitation=none`) 시나리오 A에서 43위까지
   오르는 이유는 CVSS 7.0에 더해 공격 조건(PersistentManager+FileStore+필터 미설정)이 설정
   판정에서 모두 충족되기 때문 — KEV 여부와 "설정상 도달 가능 여부"는 서로 다른 축임을 보여준다.
-- **LLM 실호출 검증 완료 + 환각 해소까지 실측**: `OPENAI_API_KEY` 설정 후 `python run.py`를
+- **LLM 실호출 검증 + 환각 완화 실측 + 근거 추출 버그 발견·수정**: `OPENAI_API_KEY` 설정 후 `python run.py`를
   Before/v1/v2 3단계로 재실행했다(모델 `gpt-4o-mini-2024-07-18`, 각 6건×3회 = 18회 실호출,
   총 15,502토큰). Before에서 CVE-2025-24813에 Ghostcat의 수정 버전(9.0.31, 정답은 9.0.99)을
   잘못 제시하고 AJP와 무관한 CVE(CVE-2023-44487 등)에 "AJP 커넥터 비활성화"를 끼워넣는 환각을
   발견 → `src/nvd.py`로 NVD에서 조회한 정확한 수정 버전을 프롬프트 근거에 주입(v1)해 패치
   버전 혼동을 해결 → 프롬프트에 그대로 박혀 있던 시나리오 식별자 문자열 "ajp-vulnerable"
-  자체가 무관한 AJP 언급을 유발한다고 보고 중립적 설명으로 교체(v2)해 두 환각을 모두 해소.
+  자체가 무관한 AJP 언급을 유발한다고 보고 중립적 설명으로 교체(v2) — v2에서 LLM 환각 두 종류는
+  관측되지 않았다. 다만 최종 검수에서 `nvd.py`가 `versionEndIncluding`(9.0.80 이하 취약)을 수정
+  버전으로 오인해 CVE-2023-44487에 취약 버전 9.0.80을 권고하는 **근거 추출 버그**를 발견, 수정(v3)했다
+  (이제 `versionEndExcluding`만 수정 버전으로 쓰고 Including 구간은 "벤더 공지 확인"으로 안내).
   전/후 원문 비교는 `poc/output/evidence/llm_before_after/README.md` 참고. 리포트의 "LLM
   생성" 배지에는 실제 호출된 모델명·토큰 수를 그대로 노출한다.
 
 ## 5. 한계 (솔직하게)
 
 - **LLM 환각은 "근거를 정확히 주면 줄어든다"는 것을 확인했지만 "0으로 보장된다"는 뜻은
-  아니다.** v2에서 테스트한 6건은 모두 깨끗했지만, 더 많은 CVE·시나리오에서 같은 효과가
-  재현되는지는 검증하지 않았다. 이 재현 범위 밖에서도 "LLM 출력은 사람 승인 전제"라는
+  아니다.** v2에서 LLM 환각은 관측되지 않았지만 같은 시점에 근거 추출 코드 버그로 틀린 버전 1건이
+  남아 있었고(v3에서 수정), 더 많은 CVE·시나리오에서 같은 효과가 재현되는지는 검증하지 않았다. 이 재현 범위 밖에서도 "LLM 출력은 사람 승인 전제"라는
   설계 원칙은 그대로 유지해야 한다. (상세 전/후 비교: `poc/output/evidence/llm_before_after/`)
 - **CVE별 도달성 룰은 3개 구현**했다(Ghostcat/server.xml, Path Equivalence/web.xml, 세션 파일
   역직렬화/context.xml). `reachability.py`의 `RULES` 딕셔너리에 CVE ID → 판정 함수를 추가하는

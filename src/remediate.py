@@ -55,7 +55,14 @@ class Remediation:
 
 
 def _build_prompt(finding: dict, scenario_label: str, fix_version_info: dict | None) -> str:
-    if fix_version_info:
+    if fix_version_info and not fix_version_info.get("fix_version"):
+        through = fix_version_info.get("vulnerable_through")
+        fix_line = (
+            f"- 공식 수정 버전: 확정 불가 — NVD상 {through} 이하가 취약(취약 구간: {fix_version_info['range']}). "
+            f"{through}은(는) 취약 버전이므로 수정 버전으로 제시하지 말 것. "
+            f"'{through} 이하 취약, 수정 버전은 벤더 공지 확인'이라고 안내하고 특정 수정 버전 숫자는 쓰지 말 것"
+        )
+    elif fix_version_info:
         fix_line = (
             f"- 공식 수정 버전(NVD cpeMatch 기준, 설치된 버전 9.0.30이 속한 구간): "
             f"{fix_version_info['fix_version']} (취약 구간: {fix_version_info['range']})"
