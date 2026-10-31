@@ -115,22 +115,22 @@ python src/report.py         # 리포트만 재렌더링
 - CVE-2020-9484만 KEV 미등재인데도(CISA SSVC `exploitation=none`) 시나리오 A에서 43위까지
   오르는 이유는 CVSS 7.0에 더해 공격 조건(PersistentManager+FileStore+필터 미설정)이 설정
   판정에서 모두 충족되기 때문 — KEV 여부와 "설정상 도달 가능 여부"는 서로 다른 축임을 보여준다.
-- **LLM 실호출 검증 완료**: `OPENAI_API_KEY` 설정 후 `python run.py` 재실행 결과, 모델
-  `gpt-4o-mini-2024-07-18`로 두 시나리오 합쳐 6건 호출(각 시나리오 상위 3건), 총 4,351
-  토큰 소비(prompt 2,728 + completion 1,623). 리포트의 "LLM 생성" 배지에 모델명·토큰 수를
-  그대로 노출한다.
+- **LLM 실호출 검증 완료 + 환각 해소까지 실측**: `OPENAI_API_KEY` 설정 후 `python run.py`를
+  Before/v1/v2 3단계로 재실행했다(모델 `gpt-4o-mini-2024-07-18`, 각 6건×3회 = 18회 실호출,
+  총 15,502토큰). Before에서 CVE-2025-24813에 Ghostcat의 수정 버전(9.0.31, 정답은 9.0.99)을
+  잘못 제시하고 AJP와 무관한 CVE(CVE-2023-44487 등)에 "AJP 커넥터 비활성화"를 끼워넣는 환각을
+  발견 → `src/nvd.py`로 NVD에서 조회한 정확한 수정 버전을 프롬프트 근거에 주입(v1)해 패치
+  버전 혼동을 해결 → 프롬프트에 그대로 박혀 있던 시나리오 식별자 문자열 "ajp-vulnerable"
+  자체가 무관한 AJP 언급을 유발한다고 보고 중립적 설명으로 교체(v2)해 두 환각을 모두 해소.
+  전/후 원문 비교는 `poc/output/evidence/llm_before_after/README.md` 참고. 리포트의 "LLM
+  생성" 배지에는 실제 호출된 모델명·토큰 수를 그대로 노출한다.
 
 ## 5. 한계 (솔직하게)
 
-- **실제 LLM 호출에서 사실 오류(환각)를 발견했다.** CVE-2025-24813의 올바른 수정 버전은
-  9.0.99(NVD 기준)인데, 생성된 조치안은 "Tomcat을 9.0.31 이상으로 업그레이드"라고 — 다른
-  CVE(Ghostcat, CVE-2020-1938)의 수정 버전과 혼동한 것으로 보이는 — 틀린 번호를 제시했다.
-  CVE-2023-44487(HTTP/2 Rapid Reset, AJP와 무관)의 조치안에도 "AJP 커넥터 비활성화"라는
-  관련 없는 대안이 섞여 나왔다. 둘 다 프롬프트에 정확한 패치 버전을 근거로 넣지 않은 채
-  모델에 맡겨서 생긴 문제이며, 사람이 검토 없이 그대로 반영하면 안 된다는 것을 실제 호출로
-  확인했다 — 이 PoC가 "LLM 출력은 사람 승인 전제"를 설계 원칙으로 못박은 이유를 뒷받침하는
-  실증 사례로 README/03_PoC.md에 정직하게 남긴다. (후속 개선: NVD에서 조회한 정확한 수정
-  버전을 prioritize.py 단계에서 미리 근거로 넣어 프롬프트에 포함시키면 줄일 수 있다.)
+- **LLM 환각은 "근거를 정확히 주면 줄어든다"는 것을 확인했지만 "0으로 보장된다"는 뜻은
+  아니다.** v2에서 테스트한 6건은 모두 깨끗했지만, 더 많은 CVE·시나리오에서 같은 효과가
+  재현되는지는 검증하지 않았다. 이 재현 범위 밖에서도 "LLM 출력은 사람 승인 전제"라는
+  설계 원칙은 그대로 유지해야 한다. (상세 전/후 비교: `poc/output/evidence/llm_before_after/`)
 - **CVE별 도달성 룰은 3개 구현**했다(Ghostcat/server.xml, Path Equivalence/web.xml, 세션 파일
   역직렬화/context.xml). `reachability.py`의 `RULES` 딕셔너리에 CVE ID → 판정 함수를 추가하는
   방식으로 계속 확장 가능한 구조다.
@@ -165,3 +165,9 @@ python src/report.py         # 리포트만 재렌더링
 - API 키는 `.env`(gitignore 대상)로만 관리하며 저장소에 커밋하지 않는다.
 - `poc/bin/*.exe`(syft, grype 바이너리)는 용량 문제로 저장소에 포함하지 않고
   `install_tools.ps1`로 받는다.
+
+## 7. 저장소 상태
+
+로컬 git 저장소로 초기화·초기 커밋 완료(`poc/`가 저장소 루트). GitHub 원격 push는 아직
+진행하지 않았다 — 이 디렉토리를 그대로 GitHub에 올리려면 원격 저장소를 만들고
+`git remote add origin <URL>` 후 `git push -u origin master`를 실행하면 된다.
